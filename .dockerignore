@@ -1,1 +1,6 @@
 .env
+.git
+.gitignore
+README.md
+images/
+chatgpt_integration/

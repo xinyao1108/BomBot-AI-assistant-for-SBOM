@@ -1,0 +1,253 @@
+openapi: 3.1.0
+info:
+  title: Bombot Context API
+  description: API for retrieving vulnerability information for software packages using SPDX and CycloneDX SBOM formats.
+  version: 1.2.0
+servers:
+  - url: https://bombot-context.onrender.com
+    description: Production server
+
+paths:
+  /api/context/spdx/pkg:
+    post:
+      operationId: getContextPackageSPDX
+      summary: Get vulnerability information for a package in SPDX SBOM format.
+      description: |
+        Sends an SPDX-formatted SBOM package description and retrieves vulnerability information.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                SPDXID:
+                  type: string
+                  example: SPDXRef-Package-1-accelerate
+                name:
+                  type: string
+                  example: accelerate
+                versionInfo:
+                  type: string
+                  example: 0.28.0
+                primaryPackagePurpose:
+                  type: string
+                  enum: [APPLICATION, LIBRARY, OTHER]
+                  example: APPLICATION
+                supplier:
+                  type: string
+                  example: "Organization: The HuggingFace team (zach.mueller@huggingface.co)"
+                downloadLocation:
+                  type: string
+                  format: uri
+                  example: https://pypi.org/project/accelerate/0.28.0
+                filesAnalyzed:
+                  type: boolean
+                  example: false
+                checksums:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      algorithm:
+                        type: string
+                        example: SHA1
+                      checkumValue:
+                        type: string
+                        example: 9e72c6129685b796841d9f426af9d98e60d9f1b0
+                licenseConcluded:
+                  type: string
+                  example: Apache-2.0
+                licenseDeclared:
+                  type: string
+                  example: NOASSERTION
+                licenseComments:
+                  type: string
+                  example: "accelerate declares Apache which is not currently a valid SPDX License identifier or expression."
+                copyrightText:
+                  type: string
+                  example: NOASSERTION
+                summary:
+                  type: string
+                  example: Accelerate
+                externalRefs:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      referenceCategory:
+                        type: string
+                        enum: [PACKAGE_MANAGER, SECURITY, OTHER]
+                        example: PACKAGE_MANAGER
+                      referenceType:
+                        type: string
+                        example: purl
+                      referenceLocator:
+                        type: string
+                        example: pkg:pypi/accelerate@0.28.0
+      responses:
+        '200':
+          description: Successful response containing vulnerability information.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  vulnerabilities:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: CVE-2024-12345
+                        severity:
+                          type: string
+                          enum: [LOW, MEDIUM, HIGH, CRITICAL]
+                          example: HIGH
+                        description:
+                          type: string
+                          example: "A remote code execution vulnerability exists in accelerate 0.28.0."
+        '400':
+          description: Bad request, possibly due to invalid input format.
+        '500':
+          description: Internal server error.
+
+  /api/context/cdx/pkg:
+    post:
+      operationId: getContextPackageCDX
+      summary: Get vulnerability information for a package in CycloneDX (CDX) SBOM format.
+      description: |
+        Sends a CycloneDX (CDX)-formatted SBOM package description and retrieves vulnerability information.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bom-ref:
+                  type: string
+                  example: doctrine/inflector-2.0.6.0
+                type:
+                  type: string
+                  enum: [library, application]
+                  example: library
+                name:
+                  type: string
+                  example: inflector
+                version:
+                  type: string
+                  example: 2.0.6
+                group:
+                  type: string
+                  example: doctrine
+                description:
+                  type: string
+                  example: "PHP Doctrine Inflector is a small library that can perform string manipulations."
+                author:
+                  type: string
+                  example: "Guilherme Blanco, Roman Borschel, Benjamin Eberlei, Jonathan Wage, Johannes Schmitt"
+                licenses:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      license:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            example: MIT
+                purl:
+                  type: string
+                  example: pkg:composer/doctrine/inflector@2.0.6
+                externalReferences:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        example: vcs
+                      url:
+                        type: string
+                        format: uri
+                        example: https://github.com/doctrine/inflector.git
+                      comment:
+                        type: string
+                        example: "as detected from Composer manifest 'support.source'"
+      responses:
+        '200':
+          description: Successful response containing vulnerability information.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  vulnerabilities:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: CVE-2024-67890
+                        severity:
+                          type: string
+                          enum: [LOW, MEDIUM, HIGH, CRITICAL]
+                          example: MEDIUM
+                        description:
+                          type: string
+                          example: "A security vulnerability found in inflector 2.0.6."
+        '400':
+          description: Bad request, possibly due to invalid input format.
+        '500':
+          description: Internal server error.
+
+  /api/store/sbom/{id}:
+    get:
+      operationId: getSBOMContext
+      summary: Retrieve the vulnerability context of an SBOM.
+      description: |
+        Queries the SBOM using the provided ID and returns its vulnerability context.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the SBOM.
+          schema:
+            type: string
+          example: "123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        '200':
+          description: Successful response containing the SBOM vulnerability context.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sbomId:
+                    type: string
+                    example: "123e4567-e89b-12d3-a456-426614174000"
+                  vulnerabilities:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: CVE-2024-98765
+                        severity:
+                          type: string
+                          enum: [LOW, MEDIUM, HIGH, CRITICAL]
+                          example: CRITICAL
+                        description:
+                          type: string
+                          example: "A critical vulnerability was found in SBOM package."
+        '400':
+          description: Bad request, invalid SBOM ID.
+        '404':
+          description: SBOM not found.
+        '500':
+          description: Internal server error.
