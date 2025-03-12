@@ -1,12 +1,12 @@
 # Bombot
-A RAG Bot to answer question about SBOMs of known softwares
+A RAG Bot to answer questions about SBOMs of known software
 
-Breif introduction: [Poster published on NDSS Symposium](https://www.ndss-symposium.org/wp-content/uploads/2025-poster-4.pdf)
+Brief introduction: [Poster published on NDSS Symposium](https://www.ndss-symposium.org/wp-content/uploads/2025-poster-4.pdf)
 
 ### Some background
 
 - The server that is proving context (Retrival part) is hosted on render.com. It is free of cost
-    - But it goes into sleep if not used for a few hours so to make sure it will give fast replies. Just open the docs page in the browser once it will wake it.
+    - But it goes to sleep if not used for a few hours so to make sure it will give fast replies. Just open the docs page in the browser once it will wake it.
     - The docs page is: `https://bombot-context.onrender.com/docs`
     - The code for this is in the `app` directory of this repo.
     - A docker image of this server is located here: `https://hub.docker.com/repository/docker/aveldan/bombot-context/general`
@@ -17,18 +17,18 @@ Breif introduction: [Poster published on NDSS Symposium](https://www.ndss-sympos
 ### General Survey Platform
 A survey template that can be used to quantitively and qualitatively evaluate the acceptability, usability, and accuracy of SBOM visualization tools.
 
-[Survey Link:](https://iu.co1.qualtrics.com/jfe/form/SV_cY2RasQrgy0SpXE)
+[Survey Link](https://iu.co1.qualtrics.com/jfe/form/SV_cY2RasQrgy0SpXE)
 
 
 ### How to make a custom GPT with ChatGPT's chat interface.
 
 - Select MyGPTs and then select create new a new GPT
 - Give it simple data like the Name and description
-- Then in the instructions section copy and paste the text in instructions.txt file in chatgpt_integration directory
-- In the capabilites section please make sure you choose 'Code Interpreter & Data Analysis' other than that rest are optional, not having them is better
-- Then click Create new action (If you are not using the same render server for the backend you will have to update the schema and also the url for privacy policy)
-    - Here in the schema section copy and paste the entire schema from openAPISchema.yaml file in the chatgpt_integration directory
-    - In the privacy policy section please enter this url: https://bombot-context.onrender.com/api/privacy-policy 
+- Then, in the instructions section, copy and paste the text in instructions.txt file in chatgpt_integration directory
+- In the capabilities section, please make sure you choose 'Code Interpreter & Data Analysis' other than the rest are optional, and not having them is better
+- Then click Create new action (If you are not using the same render server for the backend, you will have to update the schema and also the URL for privacy policy)
+    - Here in the schema section, copy and paste the entire schema from openAPISchema.yaml file in the chatgpt_integration directory
+    - In the privacy policy section,n please enter this URL: https://bombot-context.onrender.com/api/privacy-policy 
 - And that's it, you can now press create and it will work
 
 ### How to use it.
