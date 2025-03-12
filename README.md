@@ -1,5 +1,7 @@
-# secbot
+# Bombot
 A RAG Bot to answer question about SBOMs of known softwares
+
+Breif introduction: [Poster published on NDSS Symposium](https://www.ndss-symposium.org/wp-content/uploads/2025-poster-4.pdf)
 
 ### Some background
 
@@ -11,6 +13,12 @@ A RAG Bot to answer question about SBOMs of known softwares
 
 - The data is in MongoDB. This will store SBOMs when uploaded using the `/api/store/sbom/upload` API endpoint
     - Nothing is stored in the DB if you directly upload the SBOM file at ChatGPT's chat interface.
+ 
+### General Survey Platform
+A survey template that can be used to quantitively and qualitatively evaluate the acceptability, usability, and accuracy of SBOM visualization tools.
+
+[Survey Link:](https://iu.co1.qualtrics.com/jfe/form/SV_cY2RasQrgy0SpXE)
+
 
 ### How to make a custom GPT with ChatGPT's chat interface.
 
